@@ -161,11 +161,11 @@ const STAGES = ["Intake", "Inspection Scheduled", "Inspection Done", "Comp Resea
 const orders = [
     {
             addr: '4738 Emerald Ave', fullAddr: '4738 Emerald Ave, La Verne, CA 91750', client: 'No AMC',
-            stage: 'Comp Research', nextStage: 'Drafting', jobType: 'Refinance',
-            due: 'May 22', dueIso: '2026-05-22', flags: 'URGENT', color: '#f59e0b',
+            stage: 'Drafting', nextStage: 'QC Review', jobType: 'Refinance',
+            due: 'May 22', dueIso: '2026-05-22', flags: 'URGENT', color: '#f97316',
             pctStart: 0.00, pctWidth: 45.45,
-            progress: 38, todayPct: 27.27,
-            checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Banner Bank)", "checked": true}, {"text": "Start a la mode file (address: 4738 Emerald Ave, La Verne, CA 91750)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/4738 Emerald Ave, La Verne, CA 91750", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
+            progress: 50, todayPct: 27.27,
+            checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Banner Bank)", "checked": true}, {"text": "Start a la mode file (address: 4738 Emerald Ave, La Verne, CA 91750)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/4738 Emerald Ave, La Verne, CA 91750", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Draft complete", "checked": true}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
             notes: [],
             botUser: 'HQACommandBot',
             msgAdvance: 'advance%204738%20Emerald%20Ave%2C%20La%20Verne%2C%20CA%2091750',
@@ -204,6 +204,56 @@ const todayPct = 27.27;
 
 function tgUrl(botUser, msg) {
   return 'https://t.me/' + botUser + '?text=' + msg;
+}
+
+// ── Webhook config ──
+const WEBHOOK_URL   = 'http://100.72.231.115:5775/update';
+const WEBHOOK_TOKEN = 'blxgaZWDhwCQ8bySRWwimEsIveCdCJPt6Rfny1qbIm0';
+
+async function postUpdate(type, address, value, btn) {
+  const origText = btn.textContent;
+  btn.textContent = '⏳';
+  btn.style.pointerEvents = 'none';
+  try {
+    const res = await fetch(WEBHOOK_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-HQA-Token': WEBHOOK_TOKEN,
+      },
+      body: JSON.stringify({ type, address, value }),
+    });
+    const data = await res.json();
+    if (data.ok) {
+      btn.textContent = '✅';
+      btn.style.background = '#10b981';
+      showToast(data.message);
+      setTimeout(() => location.reload(), 2500);
+    } else {
+      btn.textContent = '❌ ' + (data.error || 'Error');
+      btn.style.background = '#ef4444';
+      btn.style.pointerEvents = 'auto';
+    }
+  } catch (e) {
+    // Webhook unreachable (off Tailscale) — fall back to Telegram
+    btn.textContent = origText;
+    btn.style.pointerEvents = 'auto';
+    return false;
+  }
+  return true;
+}
+
+function showToast(msg) {
+  let t = document.getElementById('hqa-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'hqa-toast';
+    t.style.cssText = 'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;padding:10px 20px;border-radius:8px;font-size:0.82rem;font-weight:500;z-index:3000;box-shadow:0 4px 16px rgba(0,0,0,0.4);transition:opacity 0.4s';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.opacity = '0'; }, 2200);
 }
 
 // ── Date axis ──
@@ -308,11 +358,17 @@ function openPanel(idx) {
   // Advance button
   const btnAdv = document.getElementById('btn-advance');
   if (o.nextStage) {
-    btnAdv.href = tgUrl(o.botUser, o.msgAdvance);
     btnAdv.className = 'btn btn-advance';
     btnAdv.textContent = '⬆ Advance to ' + o.nextStage;
+    btnAdv.removeAttribute('href');
+    btnAdv.onclick = async (e) => {
+      e.preventDefault();
+      const ok = await postUpdate('advance', o.fullAddr, '', btnAdv);
+      if (!ok) window.open(tgUrl(o.botUser, o.msgAdvance), '_blank');
+    };
   } else {
     btnAdv.removeAttribute('href');
+    btnAdv.onclick = null;
     btnAdv.className = 'btn btn-disabled';
     btnAdv.textContent = '⬆ Final stage reached';
   }
@@ -325,18 +381,14 @@ function openPanel(idx) {
   const picker = document.getElementById('due-picker');
   picker.value = o.dueIso || '';
   const btnDue = document.getElementById('btn-due');
-  picker.oninput = () => {
+  btnDue.removeAttribute('href');
+  btnDue.onclick = async (e) => {
+    e.preventDefault();
     const v = picker.value;
-    if (v) {
-      const msg = encodeURIComponent('due ' + o.fullAddr + ': ' + v);
-      btnDue.href = tgUrl(o.botUser, msg);
-    }
+    if (!v) { showToast('Pick a date first'); return; }
+    const ok = await postUpdate('due', o.fullAddr, v, btnDue);
+    if (!ok) window.open(tgUrl(o.botUser, encodeURIComponent('due ' + o.fullAddr + ': ' + v)), '_blank');
   };
-  // Set initial href if date exists
-  if (o.dueIso) {
-    const msg = encodeURIComponent('due ' + o.fullAddr + ': ' + o.dueIso);
-    btnDue.href = tgUrl(o.botUser, msg);
-  }
 
   // Checklist
   const clBody = document.getElementById('checklist-body');
@@ -353,12 +405,14 @@ function openPanel(idx) {
     div.appendChild(chk);
     div.appendChild(txt);
     if (!item.checked) {
-      const btn = document.createElement('a');
+      const btn = document.createElement('button');
       btn.className = 'cl-btn';
       btn.textContent = 'Check off';
-      btn.target = '_blank';
-      const checkMsg = encodeURIComponent('check ' + o.fullAddr + ': ' + item.text);
-      btn.href = tgUrl(o.botUser, checkMsg);
+      btn.onclick = async (e) => {
+        e.preventDefault();
+        const ok = await postUpdate('check', o.fullAddr, item.text, btn);
+        if (!ok) window.open(tgUrl(o.botUser, encodeURIComponent('check ' + o.fullAddr + ': ' + item.text)), '_blank');
+      };
       div.appendChild(btn);
     }
     clBody.appendChild(div);
@@ -378,8 +432,31 @@ function openPanel(idx) {
     });
   }
 
-  // Add note button
-  document.getElementById('btn-note').href = tgUrl(o.botUser, o.msgNote);
+  // Add note button — needs text input first
+  const btnNote = document.getElementById('btn-note');
+  btnNote.removeAttribute('href');
+
+  // Inject note input if not present
+  let noteInput = document.getElementById('note-input');
+  if (!noteInput) {
+    noteInput = document.createElement('input');
+    noteInput.id = 'note-input';
+    noteInput.type = 'text';
+    noteInput.placeholder = 'Type note here…';
+    noteInput.style.cssText = 'flex:1;background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:5px;padding:6px 10px;font-size:0.75rem;outline:none;min-width:0';
+    btnNote.parentNode.insertBefore(noteInput, btnNote);
+  }
+  noteInput.value = '';
+
+  btnNote.textContent = '✏️ Add note';
+  btnNote.onclick = async (e) => {
+    e.preventDefault();
+    const val = noteInput.value.trim();
+    if (!val) { showToast('Type a note first'); return; }
+    const ok = await postUpdate('note', o.fullAddr, val, btnNote);
+    if (!ok) window.open(tgUrl(o.botUser, encodeURIComponent('note ' + o.fullAddr + ': ' + val)), '_blank');
+    else noteInput.value = '';
+  };
 
   // Open panel
   panel.classList.add('open');
