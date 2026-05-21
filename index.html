@@ -5,52 +5,91 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>HQA Pipeline — May 20, 2026</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-          background: #0f172a; color: #e2e8f0; padding: 24px; }
-  h1 { font-size: 1.4rem; font-weight: 600; margin-bottom: 4px; color: #f1f5f9; }
-  .subtitle { font-size: 0.8rem; color: #94a3b8; margin-bottom: 24px; }
-  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.72rem; color: #cbd5e1; }
-  .legend-dot { width: 10px; height: 10px; border-radius: 50%; }
-  .chart-wrap { background: #1e293b; border-radius: 12px; padding: 20px; overflow-x: auto; }
-  .date-axis { position: relative; height: 22px; margin-left: 200px; margin-bottom: 6px; }
-  .date-tick { position: absolute; font-size: 0.68rem; color: #64748b;
-                transform: translateX(-50%); white-space: nowrap; }
-  .today-label { position: absolute; font-size: 0.68rem; color: #fbbf24; font-weight: 600;
-                  transform: translateX(-50%); white-space: nowrap; }
-  .gantt-row { display: flex; align-items: center; margin-bottom: 10px; }
-  .row-label { width: 200px; min-width: 200px; padding-right: 12px; font-size: 0.78rem;
-                text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .row-label .addr { color: #f1f5f9; font-weight: 500; }
-  .row-label .meta { color: #64748b; font-size: 0.68rem; }
-  .row-track { flex: 1; position: relative; height: 34px; background: #0f172a;
-                border-radius: 6px; overflow: visible; }
-  .bar { position: absolute; height: 28px; top: 3px; border-radius: 6px;
-          display: flex; align-items: center; padding: 0 8px; font-size: 0.72rem;
-          font-weight: 500; color: #fff; white-space: nowrap; overflow: hidden;
-          cursor: pointer; transition: filter 0.15s; box-shadow: 0 1px 4px rgba(0,0,0,0.4); }
-  .bar:hover { filter: brightness(1.2); }
-  .bar .progress-stripe { position: absolute; left: 0; top: 0; bottom: 0;
-                            background: rgba(255,255,255,0.15); border-radius: 6px 0 0 6px; }
-  .today-line { position: absolute; top: -4px; bottom: -4px; width: 2px;
-                 background: #fbbf24; z-index: 10; border-radius: 1px; }
-  .due-marker { position: absolute; top: 3px; height: 28px; width: 3px;
-                 background: rgba(255,255,255,0.35); border-radius: 2px; z-index: 5; }
-  .flag-overdue .bar { outline: 2px solid #ef4444; }
-  .flag-urgent .bar  { outline: 2px solid #f59e0b; }
-  .tooltip { position: fixed; background: #1e293b; border: 1px solid #334155;
-              border-radius: 8px; padding: 10px 14px; font-size: 0.78rem; pointer-events: none;
-              z-index: 1000; max-width: 260px; box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-              display: none; }
-  .tooltip .t-addr { font-weight: 600; color: #f1f5f9; margin-bottom: 4px; }
-  .tooltip .t-row  { color: #94a3b8; margin-top: 2px; }
-  .tooltip .t-flag { color: #fbbf24; font-weight: 600; margin-top: 4px; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;padding:20px;min-height:100vh}
+  h1{font-size:1.4rem;font-weight:600;color:#f1f5f9;margin-bottom:3px}
+  .subtitle{font-size:0.78rem;color:#94a3b8;margin-bottom:18px}
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+  .legend-item{display:flex;align-items:center;gap:4px;font-size:0.7rem;color:#cbd5e1}
+  .legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .chart-wrap{background:#1e293b;border-radius:12px;padding:18px;overflow-x:auto;margin-bottom:16px}
+  .date-axis{position:relative;height:20px;margin-left:190px;margin-bottom:5px}
+  .date-tick{position:absolute;font-size:0.65rem;color:#64748b;transform:translateX(-50%);white-space:nowrap}
+  .today-label{position:absolute;font-size:0.65rem;color:#fbbf24;font-weight:600;transform:translateX(-50%);white-space:nowrap}
+  .gantt-row{display:flex;align-items:center;margin-bottom:8px;cursor:pointer}
+  .gantt-row:hover .row-label .addr{color:#7dd3fc}
+  .row-label{width:190px;min-width:190px;padding-right:10px;font-size:0.75rem;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;user-select:none}
+  .row-label .addr{color:#f1f5f9;font-weight:500;transition:color 0.15s}
+  .row-label .meta{color:#64748b;font-size:0.65rem}
+  .row-track{flex:1;position:relative;height:32px;background:#0f172a;border-radius:5px}
+  .bar{position:absolute;height:26px;top:3px;border-radius:5px;display:flex;align-items:center;padding:0 7px;font-size:0.7rem;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;transition:filter 0.15s;box-shadow:0 1px 4px rgba(0,0,0,0.4)}
+  .bar:hover{filter:brightness(1.2)}
+  .bar .progress-stripe{position:absolute;left:0;top:0;bottom:0;background:rgba(255,255,255,0.15);border-radius:5px 0 0 5px}
+  .today-line{position:absolute;top:-3px;bottom:-3px;width:2px;background:#fbbf24;z-index:10;border-radius:1px}
+  .flag-overdue .bar{outline:2px solid #ef4444}
+  .flag-urgent .bar{outline:2px solid #f59e0b}
+
+  /* Hover tooltip for notes */
+  .notes-tip{position:fixed;background:#1e293b;border:1px solid #334155;border-radius:8px;padding:10px 14px;font-size:0.75rem;pointer-events:none;z-index:2000;max-width:280px;box-shadow:0 4px 20px rgba(0,0,0,0.6);display:none;line-height:1.5}
+  .notes-tip .nt-addr{font-weight:600;color:#7dd3fc;margin-bottom:6px;font-size:0.8rem}
+  .notes-tip .nt-entry{color:#cbd5e1;border-left:2px solid #334155;padding-left:8px;margin-bottom:4px}
+  .notes-tip .nt-empty{color:#64748b;font-style:italic}
+
+  /* Slide-out detail panel */
+  .panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:none}
+  .panel{position:fixed;right:0;top:0;bottom:0;width:min(420px,100vw);background:#1e293b;z-index:501;display:flex;flex-direction:column;transform:translateX(100%);transition:transform 0.25s ease;box-shadow:-4px 0 24px rgba(0,0,0,0.5)}
+  .panel.open{transform:translateX(0)}
+  .panel-header{padding:18px 20px 14px;border-bottom:1px solid #334155;flex-shrink:0}
+  .panel-header h2{font-size:1rem;font-weight:600;color:#f1f5f9;margin-bottom:2px}
+  .panel-header .ph-meta{font-size:0.75rem;color:#94a3b8}
+  .panel-close{position:absolute;top:14px;right:16px;background:none;border:none;color:#94a3b8;font-size:1.3rem;cursor:pointer;line-height:1;padding:4px}
+  .panel-close:hover{color:#f1f5f9}
+  .panel-body{flex:1;overflow-y:auto;padding:16px 20px}
+  .panel-section{margin-bottom:20px}
+  .panel-section h3{font-size:0.72rem;font-weight:600;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:10px}
+
+  /* Stage bar in panel */
+  .stage-track{display:flex;gap:2px;margin-bottom:10px;flex-wrap:nowrap;overflow-x:auto}
+  .stage-pip{flex:1;min-width:18px;height:6px;border-radius:3px;background:#1e3a5f;transition:background 0.2s}
+  .stage-pip.done{background:#3b82f6}
+  .stage-pip.current{background:#fbbf24}
+
+  /* Action buttons */
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:5px;padding:7px 12px;border-radius:6px;font-size:0.75rem;font-weight:500;text-decoration:none;border:none;cursor:pointer;transition:filter 0.15s;white-space:nowrap}
+  .btn:hover{filter:brightness(1.15)}
+  .btn-advance{background:#3b82f6;color:#fff}
+  .btn-note{background:#334155;color:#e2e8f0}
+  .btn-due{background:#334155;color:#e2e8f0}
+  .btn-disabled{background:#1e293b;color:#475569;cursor:not-allowed;opacity:0.5}
+
+  /* Checklist */
+  .cl-item{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid #1e293b;font-size:0.78rem}
+  .cl-item:last-child{border-bottom:none}
+  .cl-check{width:16px;height:16px;border-radius:3px;border:1px solid #475569;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:0.65rem;color:#10b981}
+  .cl-check.done{background:#10b981;border-color:#10b981;color:#fff}
+  .cl-text{flex:1;color:#cbd5e1;line-height:1.4}
+  .cl-text.done{color:#475569;text-decoration:line-through}
+  .cl-btn{background:#1e3a5f;color:#7dd3fc;border:none;border-radius:4px;padding:3px 7px;font-size:0.67rem;cursor:pointer;white-space:nowrap;text-decoration:none;flex-shrink:0}
+  .cl-btn:hover{background:#1e40af}
+
+  /* Notes list */
+  .note-entry{background:#0f172a;border-left:3px solid #334155;border-radius:0 4px 4px 0;padding:7px 10px;margin-bottom:7px;font-size:0.75rem;color:#94a3b8;line-height:1.5}
+  .note-entry:last-child{margin-bottom:0}
+  .no-notes{font-size:0.75rem;color:#475569;font-style:italic}
+
+  /* Date picker row */
+  .due-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .due-display{font-size:0.85rem;font-weight:500;color:#f1f5f9}
+  .due-display.overdue{color:#ef4444}
+  .due-display.urgent{color:#f59e0b}
+  input[type=date]{background:#0f172a;border:1px solid #334155;color:#e2e8f0;border-radius:5px;padding:5px 8px;font-size:0.75rem;outline:none}
+  input[type=date]:focus{border-color:#3b82f6}
 </style>
 </head>
 <body>
 <h1>HQA Order Pipeline</h1>
-<div class="subtitle">Updated May 20, 2026 — 3 active orders</div>
+<div class="subtitle">Updated May 20, 2026 — 3 active orders &nbsp;·&nbsp; Tap a row to manage</div>
 
 <div class="legend">
 <div class="legend-item"><div class="legend-dot" style="background:#6b7280"></div>Intake</div><div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Inspection Scheduled</div><div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div>Inspection Done</div><div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Comp Research</div><div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>Drafting</div><div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>QC Review</div><div class="legend-item"><div class="legend-dot" style="background:#10b981"></div>Delivered</div><div class="legend-item"><div class="legend-dot" style="background:#059669"></div>Invoiced</div><div class="legend-item"><div class="legend-dot" style="background:#1d4ed8"></div>Complete</div>
@@ -61,94 +100,299 @@
   <div id="gantt"></div>
 </div>
 
-<div class="tooltip" id="tooltip">
-  <div class="t-addr" id="tt-addr"></div>
-  <div class="t-row" id="tt-client"></div>
-  <div class="t-row" id="tt-stage"></div>
-  <div class="t-row" id="tt-due"></div>
-  <div class="t-flag" id="tt-flag"></div>
+<!-- Hover notes tooltip -->
+<div class="notes-tip" id="notes-tip">
+  <div class="nt-addr" id="nt-addr"></div>
+  <div id="nt-body"></div>
+</div>
+
+<!-- Panel overlay -->
+<div class="panel-overlay" id="overlay"></div>
+
+<!-- Detail panel -->
+<div class="panel" id="panel">
+  <div class="panel-header">
+    <button class="panel-close" id="panel-close">✕</button>
+    <h2 id="ph-addr">—</h2>
+    <div class="ph-meta" id="ph-meta"></div>
+  </div>
+  <div class="panel-body">
+
+    <!-- Stage -->
+    <div class="panel-section" id="sec-stage">
+      <h3>Stage</h3>
+      <div class="stage-track" id="stage-track"></div>
+      <div style="font-size:0.78rem;color:#94a3b8;margin-bottom:10px" id="stage-label"></div>
+      <div class="btn-row">
+        <a class="btn btn-advance" id="btn-advance" href="#" target="_blank">⬆ Advance stage</a>
+      </div>
+    </div>
+
+    <!-- Due Date -->
+    <div class="panel-section" id="sec-due">
+      <h3>Due Date</h3>
+      <div class="due-row">
+        <span class="due-display" id="due-display">—</span>
+        <input type="date" id="due-picker" />
+        <a class="btn btn-due" id="btn-due" href="#" target="_blank">📅 Update in Telegram</a>
+      </div>
+    </div>
+
+    <!-- Checklist -->
+    <div class="panel-section">
+      <h3>Workflow Checklist</h3>
+      <div id="checklist-body"></div>
+    </div>
+
+    <!-- Notes -->
+    <div class="panel-section">
+      <h3>Notes / Flags</h3>
+      <div id="notes-body"></div>
+      <div class="btn-row" style="margin-top:10px">
+        <a class="btn btn-note" id="btn-note" href="#" target="_blank">✏️ Add note</a>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script>
+const STAGES = ["Intake", "Inspection Scheduled", "Inspection Done", "Comp Research", "Drafting", "QC Review", "Delivered", "Invoiced", "Complete"];
 const orders = [
     {
-            addr: '4738 Emerald Ave', client: 'No AMC', stage: 'Comp Research',
-            due: 'May 22', flags: 'URGENT', color: '#f59e0b',
+            addr: '4738 Emerald Ave', fullAddr: '4738 Emerald Ave, La Verne, CA 91750', client: 'No AMC',
+            stage: 'Comp Research', nextStage: 'Drafting', jobType: 'Refinance',
+            due: 'May 22', dueIso: '2026-05-22', flags: 'URGENT', color: '#f59e0b',
             pctStart: 0.00, pctWidth: 45.45,
-            progress: 38, todayPct: 27.27
+            progress: 38, todayPct: 27.27,
+            checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Banner Bank)", "checked": true}, {"text": "Start a la mode file (address: 4738 Emerald Ave, La Verne, CA 91750)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/4738 Emerald Ave, La Verne, CA 91750", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
+            notes: [],
+            botUser: 'HQACommandBot',
+            msgAdvance: 'advance%204738%20Emerald%20Ave%2C%20La%20Verne%2C%20CA%2091750',
+            msgNote: 'note%204738%20Emerald%20Ave%2C%20La%20Verne%2C%20CA%2091750%3A%20',
+            msgCheckPrefix: 'check%204738%20Emerald%20Ave%2C%20La%20Verne%2C%20CA%2091750%3A%20'
         },
             {
-            addr: '11022 Ranch Dr', client: 'Banner Bank', stage: 'Comp Research',
-            due: 'May 25', flags: 'On track', color: '#f59e0b',
+            addr: '11022 Ranch Dr', fullAddr: '11022 Ranch Dr, Rancho Cucamonga, CA 91737', client: 'Banner Bank',
+            stage: 'Comp Research', nextStage: 'Drafting', jobType: 'Refinance',
+            due: 'May 25', dueIso: '2026-05-25', flags: 'On track', color: '#f59e0b',
             pctStart: 9.09, pctWidth: 63.64,
-            progress: 38, todayPct: 27.27
+            progress: 38, todayPct: 27.27,
+            checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Banner Bank)", "checked": true}, {"text": "Start a la mode file (address: 11022 Ranch Dr, Rancho Cucamonga, CA 91737)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/11022 Ranch Dr, Rancho Cucamonga, CA 91737", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
+            notes: [],
+            botUser: 'HQACommandBot',
+            msgAdvance: 'advance%2011022%20Ranch%20Dr%2C%20Rancho%20Cucamonga%2C%20CA%2091737',
+            msgNote: 'note%2011022%20Ranch%20Dr%2C%20Rancho%20Cucamonga%2C%20CA%2091737%3A%20',
+            msgCheckPrefix: 'check%2011022%20Ranch%20Dr%2C%20Rancho%20Cucamonga%2C%20CA%2091737%3A%20'
         },
             {
-            addr: '152 Park Avenue', client: 'Karen R. Holt', stage: 'Comp Research',
-            due: 'May 25', flags: 'On track', color: '#f59e0b',
+            addr: '152 Park Avenue', fullAddr: '152 Park Avenue, Long Beach, CA 90803', client: 'Karen R. Holt',
+            stage: 'Comp Research', nextStage: 'Drafting', jobType: 'Retrospective',
+            due: 'May 25', dueIso: '2026-05-25', flags: 'On track', color: '#f59e0b',
             pctStart: 9.09, pctWidth: 63.64,
-            progress: 38, todayPct: 27.27
+            progress: 38, todayPct: 27.27,
+            checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Karen R. Holt)", "checked": true}, {"text": "Start a la mode file (address: 152 Park Avenue, Long Beach, CA 90803)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/152 Park Avenue, Long Beach, CA 90803", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
+            notes: [],
+            botUser: 'HQACommandBot',
+            msgAdvance: 'advance%20152%20Park%20Avenue%2C%20Long%20Beach%2C%20CA%2090803',
+            msgNote: 'note%20152%20Park%20Avenue%2C%20Long%20Beach%2C%20CA%2090803%3A%20',
+            msgCheckPrefix: 'check%20152%20Park%20Avenue%2C%20Long%20Beach%2C%20CA%2090803%3A%20'
         }
 ];
 const ticks = [{pct: 0.0, label: 'May 17'}, {pct: 63.6, label: 'May 24'}];
 const todayPct = 27.27;
 
-// Render date axis
+function tgUrl(botUser, msg) {
+  return 'https://t.me/' + botUser + '?text=' + msg;
+}
+
+// ── Date axis ──
 const axis = document.getElementById('date-axis');
 ticks.forEach(t => {
-    const el = document.createElement('div');
-    el.className = 'date-tick';
-    el.style.left = t.pct + '%';
-    el.textContent = t.label;
-    axis.appendChild(el);
+  const el = document.createElement('div');
+  el.className = 'date-tick';
+  el.style.left = t.pct + '%';
+  el.textContent = t.label;
+  axis.appendChild(el);
 });
-// Today label on axis
 const todayEl = document.createElement('div');
 todayEl.className = 'today-label';
 todayEl.style.left = todayPct + '%';
 todayEl.textContent = 'Today';
 axis.appendChild(todayEl);
 
-// Render gantt rows
+// ── Gantt rows ──
 const gantt = document.getElementById('gantt');
-const tt = document.getElementById('tooltip');
+const tip   = document.getElementById('notes-tip');
+let tipTimer = null;
 
 orders.forEach((o, i) => {
-    const hasOverdue = o.flags.includes('OVERDUE');
-    const hasUrgent  = o.flags.includes('URGENT');
-    const flagClass  = hasOverdue ? 'flag-overdue' : hasUrgent ? 'flag-urgent' : '';
+  const hasOverdue = o.flags.includes('OVERDUE');
+  const hasUrgent  = o.flags.includes('URGENT');
+  const flagClass  = hasOverdue ? 'flag-overdue' : hasUrgent ? 'flag-urgent' : '';
 
-    const row = document.createElement('div');
-    row.className = 'gantt-row ' + flagClass;
-
-    row.innerHTML = `
-      <div class="row-label">
-        <div class="addr">${o.addr}</div>
-        <div class="meta">${o.client}</div>
+  const row = document.createElement('div');
+  row.className = 'gantt-row ' + flagClass;
+  row.innerHTML = `
+    <div class="row-label">
+      <div class="addr">${o.addr}</div>
+      <div class="meta">${o.client}</div>
+    </div>
+    <div class="row-track">
+      <div class="today-line" style="left:${o.todayPct}%"></div>
+      <div class="bar" style="left:${o.pctStart}%;width:${o.pctWidth}%;background:${o.color}">
+        <div class="progress-stripe" style="width:${o.progress}%"></div>
+        <span style="position:relative;z-index:1">${o.stage}</span>
       </div>
-      <div class="row-track">
-        <div class="today-line" style="left:${o.todayPct}%"></div>
-        <div class="bar" style="left:${o.pctStart}%;width:${o.pctWidth}%;background:${o.color}"
-             data-idx="${i}">
-          <div class="progress-stripe" style="width:${o.progress}%"></div>
-          <span style="position:relative;z-index:1">${o.stage}</span>
-        </div>
-      </div>`;
-    gantt.appendChild(row);
+    </div>`;
+  gantt.appendChild(row);
 
-    const bar = row.querySelector('.bar');
-    bar.addEventListener('mousemove', e => {
-        document.getElementById('tt-addr').textContent   = o.addr;
-        document.getElementById('tt-client').textContent = 'Client: ' + o.client;
-        document.getElementById('tt-stage').textContent  = 'Stage: ' + o.stage + ' (' + o.progress + '% through pipeline)';
-        document.getElementById('tt-due').textContent    = 'Due: ' + o.due;
-        document.getElementById('tt-flag').textContent   = o.flags !== 'On track' ? '⚠ ' + o.flags : '';
-        tt.style.display = 'block';
-        tt.style.left = (e.clientX + 14) + 'px';
-        tt.style.top  = (e.clientY - 10) + 'px';
-    });
-    bar.addEventListener('mouseleave', () => { tt.style.display = 'none'; });
+  // Click → open panel
+  row.addEventListener('click', () => openPanel(i));
+
+  // Hover → notes tooltip (desktop)
+  row.addEventListener('mouseenter', e => {
+    tipTimer = setTimeout(() => showTip(o, e), 400);
+  });
+  row.addEventListener('mousemove', e => {
+    tip.style.left = (e.clientX + 16) + 'px';
+    tip.style.top  = (e.clientY - 10) + 'px';
+  });
+  row.addEventListener('mouseleave', () => {
+    clearTimeout(tipTimer);
+    tip.style.display = 'none';
+  });
 });
+
+function showTip(o, e) {
+  document.getElementById('nt-addr').textContent = o.addr + ' — ' + o.stage;
+  const body = document.getElementById('nt-body');
+  body.innerHTML = '';
+  if (!o.notes || o.notes.length === 0) {
+    body.innerHTML = '<div class="nt-empty">No notes recorded.</div>';
+  } else {
+    o.notes.forEach(n => {
+      const d = document.createElement('div');
+      d.className = 'nt-entry';
+      d.textContent = n;
+      body.appendChild(d);
+    });
+  }
+  tip.style.display = 'block';
+  tip.style.left = (e.clientX + 16) + 'px';
+  tip.style.top  = (e.clientY - 10) + 'px';
+}
+
+// ── Panel ──
+const panel   = document.getElementById('panel');
+const overlay = document.getElementById('overlay');
+
+function openPanel(idx) {
+  const o = orders[idx];
+
+  document.getElementById('ph-addr').textContent = o.addr;
+  document.getElementById('ph-meta').textContent = o.client + (o.jobType ? '  ·  ' + o.jobType : '');
+
+  // Stage track
+  const track = document.getElementById('stage-track');
+  track.innerHTML = '';
+  STAGES.forEach((s, i) => {
+    const pip = document.createElement('div');
+    const si  = STAGES.indexOf(o.stage);
+    pip.className = 'stage-pip' + (i < si ? ' done' : i === si ? ' current' : '');
+    pip.title = s;
+    track.appendChild(pip);
+  });
+  document.getElementById('stage-label').textContent = o.stage + (o.nextStage ? '  →  next: ' + o.nextStage : '  (final stage)');
+
+  // Advance button
+  const btnAdv = document.getElementById('btn-advance');
+  if (o.nextStage) {
+    btnAdv.href = tgUrl(o.botUser, o.msgAdvance);
+    btnAdv.className = 'btn btn-advance';
+    btnAdv.textContent = '⬆ Advance to ' + o.nextStage;
+  } else {
+    btnAdv.removeAttribute('href');
+    btnAdv.className = 'btn btn-disabled';
+    btnAdv.textContent = '⬆ Final stage reached';
+  }
+
+  // Due date
+  const dueDisp = document.getElementById('due-display');
+  dueDisp.textContent = o.due || 'No due date set';
+  dueDisp.className = 'due-display' + (o.flags.includes('OVERDUE') ? ' overdue' : o.flags.includes('URGENT') ? ' urgent' : '');
+
+  const picker = document.getElementById('due-picker');
+  picker.value = o.dueIso || '';
+  const btnDue = document.getElementById('btn-due');
+  picker.oninput = () => {
+    const v = picker.value;
+    if (v) {
+      const msg = encodeURIComponent('due ' + o.fullAddr + ': ' + v);
+      btnDue.href = tgUrl(o.botUser, msg);
+    }
+  };
+  // Set initial href if date exists
+  if (o.dueIso) {
+    const msg = encodeURIComponent('due ' + o.fullAddr + ': ' + o.dueIso);
+    btnDue.href = tgUrl(o.botUser, msg);
+  }
+
+  // Checklist
+  const clBody = document.getElementById('checklist-body');
+  clBody.innerHTML = '';
+  (o.checklist || []).forEach(item => {
+    const div = document.createElement('div');
+    div.className = 'cl-item';
+    const chk = document.createElement('div');
+    chk.className = 'cl-check' + (item.checked ? ' done' : '');
+    chk.textContent = item.checked ? '✓' : '';
+    const txt = document.createElement('div');
+    txt.className = 'cl-text' + (item.checked ? ' done' : '');
+    txt.textContent = item.text;
+    div.appendChild(chk);
+    div.appendChild(txt);
+    if (!item.checked) {
+      const btn = document.createElement('a');
+      btn.className = 'cl-btn';
+      btn.textContent = 'Check off';
+      btn.target = '_blank';
+      const checkMsg = encodeURIComponent('check ' + o.fullAddr + ': ' + item.text);
+      btn.href = tgUrl(o.botUser, checkMsg);
+      div.appendChild(btn);
+    }
+    clBody.appendChild(div);
+  });
+
+  // Notes
+  const notesBody = document.getElementById('notes-body');
+  notesBody.innerHTML = '';
+  if (!o.notes || o.notes.length === 0) {
+    notesBody.innerHTML = '<div class="no-notes">No notes recorded.</div>';
+  } else {
+    o.notes.forEach(n => {
+      const d = document.createElement('div');
+      d.className = 'note-entry';
+      d.textContent = n;
+      notesBody.appendChild(d);
+    });
+  }
+
+  // Add note button
+  document.getElementById('btn-note').href = tgUrl(o.botUser, o.msgNote);
+
+  // Open panel
+  panel.classList.add('open');
+  overlay.style.display = 'block';
+}
+
+function closePanel() {
+  panel.classList.remove('open');
+  overlay.style.display = 'none';
+}
+
+document.getElementById('panel-close').addEventListener('click', closePanel);
+document.getElementById('overlay').addEventListener('click', closePanel);
 </script>
 </body>
 </html>
