@@ -28,8 +28,9 @@
   .today-line{position:absolute;top:-3px;bottom:-3px;width:2px;background:#fbbf24;z-index:10;border-radius:1px}
   .flag-overdue .bar{outline:2px solid #ef4444}
   .flag-urgent .bar{outline:2px solid #f59e0b}
+  .note-badge{position:absolute;right:-28px;top:50%;transform:translateY(-50%);font-size:0.65rem;color:#94a3b8;white-space:nowrap;pointer-events:none}
 
-  /* Hover tooltip for notes */
+  /* Hover tooltip for notes — desktop only */
   .notes-tip{position:fixed;background:#1e293b;border:1px solid #334155;border-radius:8px;padding:10px 14px;font-size:0.75rem;pointer-events:none;z-index:2000;max-width:280px;box-shadow:0 4px 20px rgba(0,0,0,0.6);display:none;line-height:1.5}
   .notes-tip .nt-addr{font-weight:600;color:#7dd3fc;margin-bottom:6px;font-size:0.8rem}
   .notes-tip .nt-entry{color:#cbd5e1;border-left:2px solid #334155;padding-left:8px;margin-bottom:4px}
@@ -118,13 +119,22 @@
   </div>
   <div class="panel-body">
 
+    <!-- Notes — shown first on mobile -->
+    <div class="panel-section">
+      <h3 id="notes-section-header">Notes / Flags</h3>
+      <div id="notes-body"></div>
+      <div class="btn-row" style="margin-top:10px">
+        <a class="btn btn-note" id="btn-note" href="#">✏️ Add note</a>
+      </div>
+    </div>
+
     <!-- Stage -->
     <div class="panel-section" id="sec-stage">
       <h3>Stage</h3>
       <div class="stage-track" id="stage-track"></div>
       <div style="font-size:0.78rem;color:#94a3b8;margin-bottom:10px" id="stage-label"></div>
       <div class="btn-row">
-        <a class="btn btn-advance" id="btn-advance" href="#" target="_blank">⬆ Advance stage</a>
+        <a class="btn btn-advance" id="btn-advance" href="#">⬆ Advance stage</a>
       </div>
     </div>
 
@@ -134,7 +144,7 @@
       <div class="due-row">
         <span class="due-display" id="due-display">—</span>
         <input type="date" id="due-picker" />
-        <a class="btn btn-due" id="btn-due" href="#" target="_blank">📅 Update in Telegram</a>
+        <a class="btn btn-due" id="btn-due" href="#">📅 Update</a>
       </div>
     </div>
 
@@ -142,15 +152,6 @@
     <div class="panel-section">
       <h3>Workflow Checklist</h3>
       <div id="checklist-body"></div>
-    </div>
-
-    <!-- Notes -->
-    <div class="panel-section">
-      <h3>Notes / Flags</h3>
-      <div id="notes-body"></div>
-      <div class="btn-row" style="margin-top:10px">
-        <a class="btn btn-note" id="btn-note" href="#" target="_blank">✏️ Add note</a>
-      </div>
     </div>
 
   </div>
@@ -294,6 +295,7 @@ orders.forEach((o, i) => {
         <div class="progress-stripe" style="width:${o.progress}%"></div>
         <span style="position:relative;z-index:1">${o.stage}</span>
       </div>
+      ${o.notes && o.notes.length ? `<div class="note-badge">${o.notes.length}📝</div>` : ''}
     </div>`;
   gantt.appendChild(row);
 
@@ -418,10 +420,13 @@ function openPanel(idx) {
     clBody.appendChild(div);
   });
 
-  // Notes
+  // Notes — populate first so they're visible at top of panel scroll
   const notesBody = document.getElementById('notes-body');
   notesBody.innerHTML = '';
-  if (!o.notes || o.notes.length === 0) {
+  const noteCount = (o.notes || []).length;
+  document.getElementById('notes-section-header').textContent =
+    noteCount ? `Notes / Flags  (${noteCount})` : 'Notes / Flags';
+  if (noteCount === 0) {
     notesBody.innerHTML = '<div class="no-notes">No notes recorded.</div>';
   } else {
     o.notes.forEach(n => {
