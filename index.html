@@ -28,6 +28,9 @@
   .today-line{position:absolute;top:-3px;bottom:-3px;width:2px;background:#fbbf24;z-index:10;border-radius:1px}
   .flag-overdue .bar{outline:2px solid #ef4444}
   .flag-urgent .bar{outline:2px solid #f59e0b}
+  .flag-cancelled .bar{opacity:0.45;filter:grayscale(0.6)}
+  .flag-cancelled .row-label .addr{color:#64748b;text-decoration:line-through}
+  .cancelled-badge{position:absolute;right:-70px;top:50%;transform:translateY(-50%);font-size:0.6rem;font-weight:700;color:#f43f5e;letter-spacing:0.05em;white-space:nowrap;pointer-events:none}
   .note-badge{position:absolute;right:-28px;top:50%;transform:translateY(-50%);font-size:0.65rem;color:#94a3b8;white-space:nowrap;pointer-events:none}
 
   /* Hover tooltip for notes — desktop only */
@@ -135,6 +138,7 @@
       <div style="font-size:0.78rem;color:#94a3b8;margin-bottom:10px" id="stage-label"></div>
       <div class="btn-row">
         <a class="btn btn-advance" id="btn-advance" href="#">⬆ Advance stage</a>
+        <button class="btn" id="btn-cancel" style="background:#2d1f1f;color:#f87171">🚫 Cancel order</button>
       </div>
     </div>
 
@@ -166,6 +170,7 @@ const orders = [
             due: 'May 22', dueIso: '2026-05-22', flags: 'URGENT', color: '#f97316',
             pctStart: 0.00, pctWidth: 45.45,
             progress: 44, todayPct: 27.27,
+            cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Banner Bank)", "checked": true}, {"text": "Start a la mode file (address: 4738 Emerald Ave, La Verne, CA 91750)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/4738 Emerald Ave, La Verne, CA 91750", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Drafting", "checked": true}, {"text": "Draft complete", "checked": true}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
             notes: [],
             botUser: 'HQACommandBot',
@@ -179,6 +184,7 @@ const orders = [
             due: 'May 25', dueIso: '2026-05-25', flags: 'On track', color: '#ef4444',
             pctStart: 9.09, pctWidth: 63.64,
             progress: 56, todayPct: 27.27,
+            cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Banner Bank)", "checked": true}, {"text": "Start a la mode file (address: 11022 Ranch Dr, Rancho Cucamonga, CA 91737)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/11022 Ranch Dr, Rancho Cucamonga, CA 91737", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Drafting", "checked": true}, {"text": "Draft complete", "checked": true}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
             notes: ["[2026-05-20 20:31] Architectural plans have been received, sent an email to Geoff Upham"],
             botUser: 'HQACommandBot',
@@ -192,6 +198,7 @@ const orders = [
             due: 'May 25', dueIso: '2026-05-25', flags: 'On track', color: '#f59e0b',
             pctStart: 9.09, pctWidth: 63.64,
             progress: 33, todayPct: 27.27,
+            cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Karen R. Holt)", "checked": true}, {"text": "Start a la mode file (address: 152 Park Avenue, Long Beach, CA 90803)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/152 Park Avenue, Long Beach, CA 90803", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Drafting", "checked": false}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
             notes: [],
             botUser: 'HQACommandBot',
@@ -278,9 +285,9 @@ const tip   = document.getElementById('notes-tip');
 let tipTimer = null;
 
 orders.forEach((o, i) => {
-  const hasOverdue = o.flags.includes('OVERDUE');
-  const hasUrgent  = o.flags.includes('URGENT');
-  const flagClass  = hasOverdue ? 'flag-overdue' : hasUrgent ? 'flag-urgent' : '';
+  const hasOverdue  = o.flags.includes('OVERDUE');
+  const hasUrgent   = o.flags.includes('URGENT');
+  const flagClass   = o.cancelled ? 'flag-cancelled' : hasOverdue ? 'flag-overdue' : hasUrgent ? 'flag-urgent' : '';
 
   const row = document.createElement('div');
   row.className = 'gantt-row ' + flagClass;
@@ -295,7 +302,7 @@ orders.forEach((o, i) => {
         <div class="progress-stripe" style="width:${o.progress}%"></div>
         <span style="position:relative;z-index:1">${o.stage}</span>
       </div>
-      ${o.notes && o.notes.length ? `<div class="note-badge">${o.notes.length}📝</div>` : ''}
+      ${o.cancelled ? '<div class="cancelled-badge">🚫 CANCELLED</div>' : o.notes && o.notes.length ? `<div class="note-badge">${o.notes.length}📝</div>` : ''}
     </div>`;
   gantt.appendChild(row);
 
@@ -359,7 +366,12 @@ function openPanel(idx) {
 
   // Advance button
   const btnAdv = document.getElementById('btn-advance');
-  if (o.nextStage) {
+  if (o.cancelled) {
+    btnAdv.removeAttribute('href');
+    btnAdv.onclick = null;
+    btnAdv.className = 'btn btn-disabled';
+    btnAdv.textContent = '🚫 Order cancelled';
+  } else if (o.nextStage) {
     btnAdv.className = 'btn btn-advance';
     btnAdv.textContent = '⬆ Advance to ' + o.nextStage;
     btnAdv.removeAttribute('href');
@@ -375,6 +387,20 @@ function openPanel(idx) {
     btnAdv.textContent = '⬆ Final stage reached';
   }
 
+  // Cancel button
+  const btnCancel = document.getElementById('btn-cancel');
+  if (o.cancelled) {
+    btnCancel.style.display = 'none';
+  } else {
+    btnCancel.style.display = '';
+    btnCancel.onclick = async (e) => {
+      e.preventDefault();
+      const reason = prompt('Reason for cancellation (optional):') ?? '';
+      if (reason === null) return; // user hit Cancel on the prompt
+      const ok = await postUpdate('cancel', o.fullAddr, reason, btnCancel);
+      if (!ok) window.open(tgUrl(o.botUser, encodeURIComponent('cancel ' + o.fullAddr + (reason ? ': ' + reason : ''))), '_blank');
+    };
+  }
   // Due date
   const dueDisp = document.getElementById('due-display');
   dueDisp.textContent = o.due || 'No due date set';
@@ -406,16 +432,30 @@ function openPanel(idx) {
     txt.textContent = item.text;
     div.appendChild(chk);
     div.appendChild(txt);
-    if (!item.checked) {
-      const btn = document.createElement('button');
-      btn.className = 'cl-btn';
-      btn.textContent = 'Check off';
-      btn.onclick = async (e) => {
-        e.preventDefault();
-        const ok = await postUpdate('check', o.fullAddr, item.text, btn);
-        if (!ok) window.open(tgUrl(o.botUser, encodeURIComponent('check ' + o.fullAddr + ': ' + item.text)), '_blank');
-      };
-      div.appendChild(btn);
+    if (!o.cancelled) {
+      if (!item.checked) {
+        const btn = document.createElement('button');
+        btn.className = 'cl-btn';
+        btn.textContent = 'Check off';
+        btn.onclick = async (e) => {
+          e.preventDefault();
+          const ok = await postUpdate('check', o.fullAddr, item.text, btn);
+          if (!ok) window.open(tgUrl(o.botUser, encodeURIComponent('check ' + o.fullAddr + ': ' + item.text)), '_blank');
+        };
+        div.appendChild(btn);
+      } else {
+        const btn = document.createElement('button');
+        btn.className = 'cl-btn';
+        btn.style.background = '#2d1f1f';
+        btn.style.color = '#f87171';
+        btn.textContent = 'Uncheck';
+        btn.onclick = async (e) => {
+          e.preventDefault();
+          const ok = await postUpdate('uncheck', o.fullAddr, item.text, btn);
+          if (!ok) window.open(tgUrl(o.botUser, encodeURIComponent('uncheck ' + o.fullAddr + ': ' + item.text)), '_blank');
+        };
+        div.appendChild(btn);
+      }
     }
     clBody.appendChild(div);
   });
