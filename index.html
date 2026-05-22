@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HQA Pipeline — May 20, 2026</title>
+<title>HQA Pipeline — May 21, 2026</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#0f172a;color:#e2e8f0;padding:20px;min-height:100vh}
@@ -93,7 +93,7 @@
 </head>
 <body>
 <h1>HQA Order Pipeline</h1>
-<div class="subtitle">Updated May 20, 2026 — 3 active orders &nbsp;·&nbsp; Tap a row to manage</div>
+<div class="subtitle">Updated May 21, 2026 — 4 active orders &nbsp;·&nbsp; Tap a row to manage</div>
 
 <div class="legend">
 <div class="legend-item"><div class="legend-dot" style="background:#6b7280"></div>Intake</div><div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Inspection Scheduled</div><div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div>Inspection Done</div><div class="legend-item"><div class="legend-dot" style="background:#f59e0b"></div>Comp Research</div><div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>Drafting</div><div class="legend-item"><div class="legend-dot" style="background:#ef4444"></div>QC Review</div><div class="legend-item"><div class="legend-dot" style="background:#10b981"></div>Delivered</div><div class="legend-item"><div class="legend-dot" style="background:#f43f5e"></div>Corrections</div><div class="legend-item"><div class="legend-dot" style="background:#059669"></div>Invoiced</div><div class="legend-item"><div class="legend-dot" style="background:#1d4ed8"></div>Complete</div>
@@ -168,8 +168,8 @@ const orders = [
             addr: '4738 Emerald Ave', fullAddr: '4738 Emerald Ave, La Verne, CA 91750', client: 'No AMC',
             stage: 'Drafting', nextStage: 'QC Review', jobType: 'Refinance',
             due: 'May 22', dueIso: '2026-05-22', flags: 'URGENT', color: '#f97316',
-            pctStart: 0.00, pctWidth: 45.45,
-            progress: 44, todayPct: 27.27,
+            pctStart: 0.00, pctWidth: 10.64,
+            progress: 44, todayPct: 8.51,
             cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Banner Bank)", "checked": true}, {"text": "Start a la mode file (address: 4738 Emerald Ave, La Verne, CA 91750)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/4738 Emerald Ave, La Verne, CA 91750", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Drafting", "checked": true}, {"text": "Draft complete", "checked": true}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
             notes: [],
@@ -182,8 +182,8 @@ const orders = [
             addr: '11022 Ranch Dr', fullAddr: '11022 Ranch Dr, Rancho Cucamonga, CA 91737', client: 'Banner Bank',
             stage: 'Drafting', nextStage: 'QC Review', jobType: 'Refinance',
             due: 'May 25', dueIso: '2026-05-25', flags: 'STUCK', color: '#f97316',
-            pctStart: 9.09, pctWidth: 63.64,
-            progress: 44, todayPct: 27.27,
+            pctStart: 2.13, pctWidth: 14.89,
+            progress: 44, todayPct: 8.51,
             cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": false}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Banner Bank)", "checked": true}, {"text": "Start a la mode file (address: 11022 Ranch Dr, Rancho Cucamonga, CA 91737)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/11022 Ranch Dr, Rancho Cucamonga, CA 91737", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Drafting", "checked": true}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
             notes: ["[2026-05-20 20:31] Architectural plans have been received, sent an email to Geoff Upham"],
@@ -196,8 +196,8 @@ const orders = [
             addr: '152 Park Avenue', fullAddr: '152 Park Avenue, Long Beach, CA 90803', client: 'Karen R. Holt',
             stage: 'Drafting', nextStage: 'QC Review', jobType: 'Retrospective',
             due: 'May 25', dueIso: '2026-05-25', flags: 'On track', color: '#f97316',
-            pctStart: 9.09, pctWidth: 63.64,
-            progress: 44, todayPct: 27.27,
+            pctStart: 2.13, pctWidth: 14.89,
+            progress: 44, todayPct: 8.51,
             cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": true}, {"text": "Send confirmation to client (Karen R. Holt)", "checked": true}, {"text": "Start a la mode file (address: 152 Park Avenue, Long Beach, CA 90803)", "checked": true}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/152 Park Avenue, Long Beach, CA 90803", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Drafting", "checked": true}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
             notes: [],
@@ -205,10 +205,24 @@ const orders = [
             msgAdvance: 'advance%20152%20Park%20Avenue%2C%20Long%20Beach%2C%20CA%2090803',
             msgNote: 'note%20152%20Park%20Avenue%2C%20Long%20Beach%2C%20CA%2090803%3A%20',
             msgCheckPrefix: 'check%20152%20Park%20Avenue%2C%20Long%20Beach%2C%20CA%2090803%3A%20'
+        },
+            {
+            addr: '2341 Meadow Valley Terrace', fullAddr: '2341 Meadow Valley Terrace, Los Angeles, 90039', client: 'Brooke White',
+            stage: 'Intake', nextStage: 'Inspection Scheduled', jobType: 'Retrospective',
+            due: 'Jun 30', dueIso: '2026-06-30', flags: 'On track', color: '#6b7280',
+            pctStart: 8.51, pctWidth: 85.11,
+            progress: 0, todayPct: 8.51,
+            cancelled: false,
+            checklist: [{"text": "Order received and logged", "checked": false}, {"text": "Contact borrower to schedule inspection", "checked": false}, {"text": "Confirm inspection with borrower", "checked": false}, {"text": "Add inspection to Google Calendar (Hearn Quality Calendar)", "checked": false}, {"text": "Send confirmation to client (Brooke White)", "checked": false}, {"text": "Start a la mode file (address: 2341 Meadow Valley Terrace, Los Angeles, 90039)", "checked": false}, {"text": "Dropbox folder created: /mnt/c/Users/Mark Hearns/HQA, Inc Dropbox/HQA, Inc Team Folder/Assignments/2026 Assignments/05 May 2026/2341 Meadow Valley Terrace, Los Angeles, 90039", "checked": false}, {"text": "Inspection complete", "checked": false}, {"text": "Comp research", "checked": false}, {"text": "Drafting", "checked": false}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
+            notes: [],
+            botUser: 'HQACommandBot',
+            msgAdvance: 'advance%202341%20Meadow%20Valley%20Terrace%2C%20Los%20Angeles%2C%2090039',
+            msgNote: 'note%202341%20Meadow%20Valley%20Terrace%2C%20Los%20Angeles%2C%2090039%3A%20',
+            msgCheckPrefix: 'check%202341%20Meadow%20Valley%20Terrace%2C%20Los%20Angeles%2C%2090039%3A%20'
         }
 ];
-const ticks = [{pct: 0.0, label: 'May 17'}, {pct: 63.6, label: 'May 24'}];
-const todayPct = 27.27;
+const ticks = [{pct: 0.0, label: 'May 17'}, {pct: 14.9, label: 'May 24'}, {pct: 29.8, label: 'May 31'}, {pct: 44.7, label: 'Jun 07'}, {pct: 59.6, label: 'Jun 14'}, {pct: 74.5, label: 'Jun 21'}, {pct: 89.4, label: 'Jun 28'}];
+const todayPct = 8.51;
 
 function tgUrl(botUser, msg) {
   return 'https://t.me/' + botUser + '?text=' + msg;
