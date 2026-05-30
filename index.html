@@ -322,6 +322,8 @@ const gantt = document.getElementById('gantt');
 const tip   = document.getElementById('notes-tip');
 let tipTimer = null;
 
+console.log('Starting to render', orders.length, 'orders');
+
 orders.forEach((o, i) => {
   const hasOverdue  = o.flags.includes('OVERDUE');
   const hasUrgent   = o.flags.includes('URGENT');
@@ -343,9 +345,12 @@ orders.forEach((o, i) => {
   gantt.appendChild(row);
   
   // Render segment bar HTML
+  console.log('Order', i, ':', o.addr, 'segmentBar length:', o.segmentBar ? o.segmentBar.length : 0);
   const segBarDiv = document.getElementById('segBar-' + i);
+  console.log('  div found:', !!segBarDiv);
   if (segBarDiv && o.segmentBar) {
     segBarDiv.innerHTML = o.segmentBar;
+    console.log('  innerHTML set');
   }
 
   // Click → open panel
