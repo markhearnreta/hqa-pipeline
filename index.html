@@ -334,7 +334,7 @@ orders.forEach((o, i) => {
   gantt.appendChild(row);
   
   // Render segment bar HTML
-  const segBarDiv = document.getElementById(`segBar-${i}`);
+  const segBarDiv = document.getElementById('segBar-' + i);
   if (segBarDiv && o.segmentBar) {
     segBarDiv.innerHTML = o.segmentBar;
   }
