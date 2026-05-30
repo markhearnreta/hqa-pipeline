@@ -245,7 +245,16 @@ const todayPct = 25.53;
 
 // ── Webhook config ──
 const WEBHOOK_URL   = 'http://100.72.231.115:5775/update';
-const WEBHOOK_TOKEN = 'blxgaZWDhwCQ8bySRWwimEsIveCdCJPt6Rfny1qbIm0';
+const WEBHOOK_TOKEN='***';
+
+// Debug: Check if divs exist after rendering
+setTimeout(() => {
+  console.log('Order count:', orders.length);
+  for (let i = 0; i < orders.length; i++) {
+    const div = document.getElementById('segBar-' + i);
+    console.log('segBar-' + i + ' exists:', !!div, 'has segmentBar:', !!orders[i].segmentBar);
+  }
+}, 500);
 
 async function postUpdate(type, address, value, btn) {
   const origText = btn.textContent;
