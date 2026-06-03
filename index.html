@@ -13,8 +13,8 @@
   .legend-item{display:flex;align-items:center;gap:4px;font-size:0.7rem;color:#cbd5e1}
   .legend-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
   .chart-wrap{background:#1e293b;border-radius:12px;padding:18px;overflow-x:auto;margin-bottom:16px}
-  .date-axis{position:relative;height:20px;margin-left:190px;margin-bottom:5px}
-  .date-tick{position:absolute;font-size:0.65rem;color:#64748b;transform:translateX(-50%);white-space:nowrap}
+  .date-axis{position:relative;height:35px;margin-left:190px;margin-bottom:8px}
+  .date-tick{position:absolute;font-size:0.6rem;color:#64748b;transform:translateX(-50%) rotateZ(-45deg);white-space:nowrap;transform-origin:bottom center;top:0}
   .today-label{position:absolute;font-size:0.65rem;color:#fbbf24;font-weight:600;transform:translateX(-50%);white-space:nowrap}
   .gantt-row{display:flex;align-items:center;margin-bottom:8px;cursor:pointer}
   .gantt-row:hover .row-label .addr{color:#7dd3fc}
@@ -235,7 +235,7 @@ const orders = [
             orderDate: '2026-05-21'
         }
 ];
-const ticks = [{pct: 0.0, label: 'May 17'}, {pct: 14.9, label: 'May 24'}, {pct: 29.8, label: 'May 31'}, {pct: 44.7, label: 'Jun 07'}, {pct: 59.6, label: 'Jun 14'}, {pct: 74.5, label: 'Jun 21'}, {pct: 89.4, label: 'Jun 28'}];
+const ticks = [{pct: 0.0, label: '05/17'}, {pct: 2.1, label: '05/18'}, {pct: 4.3, label: '05/19'}, {pct: 6.4, label: '05/20'}, {pct: 8.5, label: '05/21'}, {pct: 10.6, label: '05/22'}, {pct: 12.8, label: '05/23'}, {pct: 14.9, label: '05/24'}, {pct: 17.0, label: '05/25'}, {pct: 19.1, label: '05/26'}, {pct: 21.3, label: '05/27'}, {pct: 23.4, label: '05/28'}, {pct: 25.5, label: '05/29'}, {pct: 27.7, label: '05/30'}, {pct: 29.8, label: '05/31'}, {pct: 31.9, label: '06/01'}, {pct: 34.0, label: '06/02'}, {pct: 36.2, label: '06/03'}, {pct: 38.3, label: '06/04'}, {pct: 40.4, label: '06/05'}, {pct: 42.6, label: '06/06'}, {pct: 44.7, label: '06/07'}, {pct: 46.8, label: '06/08'}, {pct: 48.9, label: '06/09'}, {pct: 51.1, label: '06/10'}, {pct: 53.2, label: '06/11'}, {pct: 55.3, label: '06/12'}, {pct: 57.4, label: '06/13'}, {pct: 59.6, label: '06/14'}, {pct: 61.7, label: '06/15'}, {pct: 63.8, label: '06/16'}, {pct: 66.0, label: '06/17'}, {pct: 68.1, label: '06/18'}, {pct: 70.2, label: '06/19'}, {pct: 72.3, label: '06/20'}, {pct: 74.5, label: '06/21'}, {pct: 76.6, label: '06/22'}, {pct: 78.7, label: '06/23'}, {pct: 80.9, label: '06/24'}, {pct: 83.0, label: '06/25'}, {pct: 85.1, label: '06/26'}, {pct: 87.2, label: '06/27'}, {pct: 89.4, label: '06/28'}, {pct: 91.5, label: '06/29'}, {pct: 93.6, label: '06/30'}, {pct: 95.7, label: '07/01'}, {pct: 97.9, label: '07/02'}, {pct: 100.0, label: '07/03'}];
 const todayPct = 36.17;
 
 // ── Webhook config ──
