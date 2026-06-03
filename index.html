@@ -16,7 +16,7 @@
   .date-axis{position:relative;height:30px;margin-left:190px;margin-bottom:10px}
   .date-tick{position:absolute;font-size:0.55rem;color:#64748b;transform:translateX(-50%) rotateZ(-45deg);transform-origin:0 0;white-space:nowrap;line-height:1}
   .today-label{position:absolute;font-size:0.65rem;color:#fbbf24;font-weight:600;transform:translateX(-50%);white-space:nowrap}
-  .gantt-row{display:flex;align-items:center;margin-bottom:8px;cursor:pointer}
+  .gantt-row{display:flex;align-items:center;margin-bottom:12px;cursor:pointer}
   .gantt-row:hover .row-label .addr{color:#7dd3fc}
   .row-label{width:190px;min-width:190px;padding-right:10px;font-size:0.75rem;text-align:right;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;user-select:none}
   .row-label .addr{color:#f1f5f9;font-weight:500;transition:color 0.15s}
@@ -186,8 +186,8 @@ const orders = [
             addr: '4738 Emerald Ave', fullAddr: '4738 Emerald Ave, La Verne, CA 91750', client: 'No AMC',
             stage: 'Invoiced', nextStage: 'Complete', jobType: 'Refinance',
             due: 'May 22', dueIso: '2026-05-22', flags: 'OVERDUE, STUCK', color: '#059669',
-            pctStart: 0.00, pctWidth: 29.31,
-            progress: 89, todayPct: 29.31,
+            pctStart: 0.00, pctWidth: 27.87,
+            progress: 89, todayPct: 27.87,
             cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar", "checked": true}, {"text": "Send confirmation to client", "checked": true}, {"text": "Start appraisal software file", "checked": true}, {"text": "Dropbox folder created", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Drafting", "checked": true}, {"text": "Draft complete", "checked": true}, {"text": "QC review", "checked": true}, {"text": "Report delivered", "checked": true}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": true}, {"text": "Payment received", "checked": false}],
             notes: [],
@@ -198,8 +198,8 @@ const orders = [
             addr: '11022 Ranch Dr', fullAddr: '11022 Ranch Dr, Rancho Cucamonga, CA 91737', client: 'Banner Bank',
             stage: 'Invoiced', nextStage: 'Complete', jobType: 'Refinance',
             due: 'May 25', dueIso: '2026-05-25', flags: 'OVERDUE, STUCK', color: '#059669',
-            pctStart: 1.72, pctWidth: 27.59,
-            progress: 89, todayPct: 29.31,
+            pctStart: 1.64, pctWidth: 26.23,
+            progress: 89, todayPct: 27.87,
             cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": false}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar", "checked": true}, {"text": "Send confirmation to client", "checked": true}, {"text": "Start appraisal software file", "checked": true}, {"text": "Dropbox folder created", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Drafting", "checked": true}, {"text": "Draft complete", "checked": true}, {"text": "QC review", "checked": true}, {"text": "Report delivered", "checked": true}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": true}, {"text": "Payment received", "checked": false}],
             notes: ["[2026-05-20 20:31] Architectural plans have been received, sent an email to Geoff Upham"],
@@ -210,8 +210,8 @@ const orders = [
             addr: '152 Park Avenue', fullAddr: '152 Park Avenue, Long Beach, CA 90803', client: 'Karen R. Holt',
             stage: 'Drafting', nextStage: 'QC Review', jobType: 'Retrospective',
             due: 'May 25', dueIso: '2026-05-25', flags: 'OVERDUE', color: '#f97316',
-            pctStart: 1.72, pctWidth: 27.59,
-            progress: 44, todayPct: 29.31,
+            pctStart: 1.64, pctWidth: 26.23,
+            progress: 44, todayPct: 27.87,
             cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar", "checked": true}, {"text": "Send confirmation to client", "checked": true}, {"text": "Start appraisal software file", "checked": true}, {"text": "Dropbox folder created", "checked": true}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Drafting", "checked": true}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
             notes: [],
@@ -222,8 +222,8 @@ const orders = [
             addr: '648 Jacon Way', fullAddr: '648 Jacon Way, Pacific Palisades, CA 90272', client: 'Banner Bank',
             stage: 'Inspection Scheduled', nextStage: 'Inspection Done', jobType: 'Proposed Construction',
             due: 'Jun 05', dueIso: '2026-06-05', flags: 'URGENT', color: '#3b82f6',
-            pctStart: 8.62, pctWidth: 20.69,
-            progress: 11, todayPct: 29.31,
+            pctStart: 8.20, pctWidth: 19.67,
+            progress: 11, todayPct: 27.87,
             cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": false}, {"text": "Add inspection to Google Calendar", "checked": false}, {"text": "Send confirmation to client", "checked": false}, {"text": "Start appraisal software file", "checked": false}, {"text": "Dropbox folder created", "checked": false}, {"text": "Inspection complete", "checked": false}, {"text": "Comp research", "checked": false}, {"text": "Drafting", "checked": false}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
             notes: [],
@@ -234,8 +234,8 @@ const orders = [
             addr: '2341 Meadow Valley Terrace', fullAddr: '2341 Meadow Valley Terrace, Los Angeles, 90039', client: 'Brooke White',
             stage: 'Drafting', nextStage: 'QC Review', jobType: 'Retrospective',
             due: 'Jun 30', dueIso: '2026-06-30', flags: 'STUCK', color: '#f97316',
-            pctStart: 6.90, pctWidth: 22.41,
-            progress: 44, todayPct: 29.31,
+            pctStart: 6.56, pctWidth: 21.31,
+            progress: 44, todayPct: 27.87,
             cancelled: false,
             checklist: [{"text": "Order received and logged", "checked": true}, {"text": "Contact borrower to schedule inspection", "checked": true}, {"text": "Confirm inspection with borrower", "checked": true}, {"text": "Add inspection to Google Calendar", "checked": true}, {"text": "Send confirmation to client", "checked": true}, {"text": "Start appraisal software file", "checked": false}, {"text": "Dropbox folder created", "checked": false}, {"text": "Inspection complete", "checked": true}, {"text": "Comp research", "checked": true}, {"text": "Drafting", "checked": true}, {"text": "Draft complete", "checked": false}, {"text": "QC review", "checked": false}, {"text": "Report delivered", "checked": false}, {"text": "Corrections received", "checked": false}, {"text": "Corrections complete", "checked": false}, {"text": "Invoice sent", "checked": false}, {"text": "Payment received", "checked": false}],
             notes: [],
@@ -243,8 +243,8 @@ const orders = [
             segmentBar: '<svg viewBox="0 0 100 100" style="width:100%;height:40px;background:#0f172a;border:1px solid #334155;border-radius:4px;display:block;margin-bottom:4px"> <rect x="0%" y="0" width="2.5%" height="100%" fill="#6b7280" stroke="#1f2937" stroke-width="0.5" rx="1" ry="1" title="Intake: May 21 → May 22"/> <rect x="2.5%" y="0" width="5.0%" height="100%" fill="#3b82f6" stroke="#1f2937" stroke-width="0.5" rx="1" ry="1" title="Inspection Scheduled: May 22 → May 24"/> <rect x="7.5%" y="0" width="7.5%" height="100%" fill="#8b5cf6" stroke="#1f2937" stroke-width="0.5" rx="1" ry="1" title="Inspection Done: May 24 → May 27"/> <rect x="15.0%" y="0" width="12.500000000000004%" height="100%" fill="#f59e0b" stroke="#1f2937" stroke-width="0.5" rx="1" ry="1" title="Comp Research: May 27 → Jun 01"/> <rect x="27.500000000000004%" y="0" width="72.5%" height="100%" fill="#f97316" stroke="#1f2937" stroke-width="0.5" rx="1" ry="1" title="Drafting: Jun 01 → Jun 30"/> </svg><div class="segment-dates" style="display:flex;justify-content:space-between;font-size:0.7rem;color:#94a3b8;padding:0 2px"> <span style="flex:0;font-size:0.7rem">Order: 05/21</span> <span style="flex:1"></span> <span style="flex:0;font-size:0.7rem">Due: 06/30</span> </div>'
         }
 ];
-const ticks = [{pct: 0.0, label: '05/17'}, {pct: 1.7, label: '05/18'}, {pct: 3.4, label: '05/19'}, {pct: 5.2, label: '05/20'}, {pct: 6.9, label: '05/21'}, {pct: 8.6, label: '05/22'}, {pct: 10.3, label: '05/23'}, {pct: 12.1, label: '05/24'}, {pct: 13.8, label: '05/25'}, {pct: 15.5, label: '05/26'}, {pct: 17.2, label: '05/27'}, {pct: 19.0, label: '05/28'}, {pct: 20.7, label: '05/29'}, {pct: 22.4, label: '05/30'}, {pct: 24.1, label: '05/31'}, {pct: 25.9, label: '06/01'}, {pct: 27.6, label: '06/02'}, {pct: 29.3, label: '06/03'}, {pct: 31.0, label: '06/04'}, {pct: 32.8, label: '06/05'}, {pct: 34.5, label: '06/06'}, {pct: 36.2, label: '06/07'}, {pct: 37.9, label: '06/08'}, {pct: 39.7, label: '06/09'}, {pct: 41.4, label: '06/10'}, {pct: 43.1, label: '06/11'}, {pct: 44.8, label: '06/12'}, {pct: 46.6, label: '06/13'}, {pct: 48.3, label: '06/14'}, {pct: 50.0, label: '06/15'}, {pct: 51.7, label: '06/16'}, {pct: 53.4, label: '06/17'}, {pct: 55.2, label: '06/18'}, {pct: 56.9, label: '06/19'}, {pct: 58.6, label: '06/20'}, {pct: 60.3, label: '06/21'}, {pct: 62.1, label: '06/22'}, {pct: 63.8, label: '06/23'}, {pct: 65.5, label: '06/24'}, {pct: 67.2, label: '06/25'}, {pct: 69.0, label: '06/26'}, {pct: 70.7, label: '06/27'}, {pct: 72.4, label: '06/28'}, {pct: 74.1, label: '06/29'}, {pct: 75.9, label: '06/30'}, {pct: 77.6, label: '07/01'}, {pct: 79.3, label: '07/02'}, {pct: 81.0, label: '07/03'}, {pct: 82.8, label: '07/04'}, {pct: 84.5, label: '07/05'}, {pct: 86.2, label: '07/06'}, {pct: 87.9, label: '07/07'}, {pct: 89.7, label: '07/08'}, {pct: 91.4, label: '07/09'}, {pct: 93.1, label: '07/10'}, {pct: 94.8, label: '07/11'}, {pct: 96.6, label: '07/12'}, {pct: 98.3, label: '07/13'}, {pct: 100.0, label: '07/14'}];
-const todayPct = 29.31;
+const ticks = [{pct: 0.0, label: '05/17'}, {pct: 1.6, label: '05/18'}, {pct: 3.3, label: '05/19'}, {pct: 4.9, label: '05/20'}, {pct: 6.6, label: '05/21'}, {pct: 8.2, label: '05/22'}, {pct: 9.8, label: '05/23'}, {pct: 11.5, label: '05/24'}, {pct: 13.1, label: '05/25'}, {pct: 14.8, label: '05/26'}, {pct: 16.4, label: '05/27'}, {pct: 18.0, label: '05/28'}, {pct: 19.7, label: '05/29'}, {pct: 21.3, label: '05/30'}, {pct: 23.0, label: '05/31'}, {pct: 24.6, label: '06/01'}, {pct: 26.2, label: '06/02'}, {pct: 27.9, label: '06/03'}, {pct: 29.5, label: '06/04'}, {pct: 31.1, label: '06/05'}, {pct: 32.8, label: '06/06'}, {pct: 34.4, label: '06/07'}, {pct: 36.1, label: '06/08'}, {pct: 37.7, label: '06/09'}, {pct: 39.3, label: '06/10'}, {pct: 41.0, label: '06/11'}, {pct: 42.6, label: '06/12'}, {pct: 44.3, label: '06/13'}, {pct: 45.9, label: '06/14'}, {pct: 47.5, label: '06/15'}, {pct: 49.2, label: '06/16'}, {pct: 50.8, label: '06/17'}, {pct: 52.5, label: '06/18'}, {pct: 54.1, label: '06/19'}, {pct: 55.7, label: '06/20'}, {pct: 57.4, label: '06/21'}, {pct: 59.0, label: '06/22'}, {pct: 60.7, label: '06/23'}, {pct: 62.3, label: '06/24'}, {pct: 63.9, label: '06/25'}, {pct: 65.6, label: '06/26'}, {pct: 67.2, label: '06/27'}, {pct: 68.9, label: '06/28'}, {pct: 70.5, label: '06/29'}, {pct: 72.1, label: '06/30'}, {pct: 73.8, label: '07/01'}, {pct: 75.4, label: '07/02'}, {pct: 77.0, label: '07/03'}, {pct: 78.7, label: '07/04'}, {pct: 80.3, label: '07/05'}, {pct: 82.0, label: '07/06'}, {pct: 83.6, label: '07/07'}, {pct: 85.2, label: '07/08'}, {pct: 86.9, label: '07/09'}, {pct: 88.5, label: '07/10'}, {pct: 90.2, label: '07/11'}, {pct: 91.8, label: '07/12'}, {pct: 93.4, label: '07/13'}, {pct: 95.1, label: '07/14'}, {pct: 96.7, label: '07/15'}, {pct: 98.4, label: '07/16'}, {pct: 100.0, label: '07/17'}];
+const todayPct = 27.87;
 
 // ── Webhook config ──
 const WEBHOOK_URL   = 'http://100.72.231.115:5775/update';
