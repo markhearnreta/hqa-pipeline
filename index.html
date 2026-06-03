@@ -22,7 +22,7 @@
   .row-label .addr{color:#f1f5f9;font-weight:500;transition:color 0.15s}
   .row-label .meta{color:#64748b;font-size:0.65rem}
   .row-track{flex:1;position:relative;height:32px;background:linear-gradient(90deg, transparent 0%, transparent calc(100% - 1px), #1e3a5f 0%, #1e3a5f 100%);background-size:calc(1/35 * 100%) 100%;border-radius:5px}
-  .bar{position:absolute;height:26px;top:3px;border-radius:5px;display:flex;align-items:center;padding:0 7px;font-size:0.7rem;font-weight:500;color:#fff;white-space:nowrap;overflow:hidden;transition:filter 0.15s;box-shadow:0 1px 4px rgba(0,0,0,0.4)}
+  .bar{position:absolute;height:26px;top:3px;border-radius:5px;display:flex;align-items:center;padding:0 7px;font-size:0.7rem;font-weight:500;color:#fff;white-space:nowrap;overflow:visible;transition:filter 0.15s;box-shadow:0 1px 4px rgba(0,0,0,0.4)}
   .bar:hover{filter:brightness(1.2)}
   .bar .progress-stripe{position:absolute;left:0;top:0;bottom:0;background:rgba(255,255,255,0.15);border-radius:5px 0 0 5px}
   .bar .stage-dots{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);display:flex;justify-content:space-around;padding:0 2px;z-index:2;font-size:0.5rem}
@@ -38,6 +38,11 @@
   .flag-badge.overdue{background:#ef4444;color:#fff}
   .flag-badge.urgent{background:#f59e0b;color:#fff}
   .flag-badge.stuck{background:#8b5cf6;color:#fff}
+  .cancelled-badge-inline{position:relative;z-index:2;font-size:0.55rem;font-weight:700;padding:2px 6px;background:rgba(244,63,94,0.9);color:#fff;border-radius:3px;margin-left:auto;white-space:nowrap}
+  .flag-badge-inline{position:relative;z-index:2;font-size:0.55rem;font-weight:600;padding:2px 6px;border-radius:3px;margin-left:4px;white-space:nowrap}
+  .flag-badge-inline.overdue{background:rgba(239,68,68,0.9);color:#fff}
+  .flag-badge-inline.urgent{background:rgba(245,158,11,0.9);color:#fff}
+  .flag-badge-inline.stuck{background:rgba(139,92,246,0.9);color:#fff}
 
   /* Hover tooltip for notes — desktop only */
   .notes-tip{position:fixed;background:#1e293b;border:1px solid #334155;border-radius:8px;padding:10px 14px;font-size:0.75rem;pointer-events:none;z-index:2000;max-width:280px;box-shadow:0 4px 20px rgba(0,0,0,0.6);display:none;line-height:1.5}
@@ -329,11 +334,11 @@ orders.forEach((o, i) => {
       <div class="bar" style="left:${o.pctStart}%;width:${o.pctWidth}%;background:${o.barGradient}">
         <div class="progress-stripe" style="width:${o.progress}%"></div>
         <span style="position:relative;z-index:1">${o.stage}</span>
+        ${o.cancelled ? '<div class="cancelled-badge-inline">🚫 CANCELLED</div>' : ''}
+        ${o.flags.includes('OVERDUE') ? '<div class="flag-badge-inline overdue">⚠ OVERDUE</div>' : ''}
+        ${o.flags.includes('URGENT') ? '<div class="flag-badge-inline urgent">🔴 URGENT</div>' : ''}
+        ${o.flags.includes('STUCK') ? '<div class="flag-badge-inline stuck">🔒 STUCK</div>' : ''}
       </div>
-      ${o.cancelled ? '<div class="cancelled-badge">🚫 CANCELLED</div>' : ''}
-      ${o.flags.includes('OVERDUE') ? '<div class="flag-badge overdue">⚠ OVERDUE</div>' : ''}
-      ${o.flags.includes('URGENT') ? '<div class="flag-badge urgent">🔴 URGENT</div>' : ''}
-      ${o.flags.includes('STUCK') ? '<div class="flag-badge stuck">🔒 STUCK</div>' : ''}
       ${!o.cancelled && !o.flags.length && o.notes && o.notes.length ? `<div class="note-badge">${o.notes.length}📝</div>` : ''}
     </div>`;
   gantt.appendChild(row);
