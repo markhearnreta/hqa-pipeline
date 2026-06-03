@@ -34,6 +34,10 @@
   .flag-cancelled .row-label .addr{color:#64748b;text-decoration:line-through}
   .cancelled-badge{position:absolute;right:-70px;top:50%;transform:translateY(-50%);font-size:0.6rem;font-weight:700;color:#f43f5e;letter-spacing:0.05em;white-space:nowrap;pointer-events:none}
   .note-badge{position:absolute;right:-28px;top:50%;transform:translateY(-50%);font-size:0.65rem;color:#94a3b8;white-space:nowrap;pointer-events:none}
+  .flag-badge{position:absolute;right:4px;top:50%;transform:translateY(-50%);font-size:0.5rem;font-weight:600;padding:2px 5px;border-radius:3px;white-space:nowrap;pointer-events:none}
+  .flag-badge.overdue{background:#ef4444;color:#fff}
+  .flag-badge.urgent{background:#f59e0b;color:#fff}
+  .flag-badge.stuck{background:#8b5cf6;color:#fff}
 
   /* Hover tooltip for notes — desktop only */
   .notes-tip{position:fixed;background:#1e293b;border:1px solid #334155;border-radius:8px;padding:10px 14px;font-size:0.75rem;pointer-events:none;z-index:2000;max-width:280px;box-shadow:0 4px 20px rgba(0,0,0,0.6);display:none;line-height:1.5}
@@ -326,7 +330,11 @@ orders.forEach((o, i) => {
         <div class="progress-stripe" style="width:${o.progress}%"></div>
         <span style="position:relative;z-index:1">${o.stage}</span>
       </div>
-      ${o.cancelled ? '<div class="cancelled-badge">🚫 CANCELLED</div>' : o.notes && o.notes.length ? `<div class="note-badge">${o.notes.length}📝</div>` : ''}
+      ${o.cancelled ? '<div class="cancelled-badge">🚫 CANCELLED</div>' : ''}
+      ${o.flags.includes('OVERDUE') ? '<div class="flag-badge overdue">⚠ OVERDUE</div>' : ''}
+      ${o.flags.includes('URGENT') ? '<div class="flag-badge urgent">🔴 URGENT</div>' : ''}
+      ${o.flags.includes('STUCK') ? '<div class="flag-badge stuck">🔒 STUCK</div>' : ''}
+      ${!o.cancelled && !o.flags.length && o.notes && o.notes.length ? `<div class="note-badge">${o.notes.length}📝</div>` : ''}
     </div>`;
   gantt.appendChild(row);
 
